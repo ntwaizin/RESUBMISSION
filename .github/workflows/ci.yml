@@ -1,0 +1,56 @@
+name: RaceDay CI
+
+# Runs on every push and pull request.
+# 1) checks the repository structure, 2) builds the API, 3) runs ALL unit tests.
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  validate-structure:
+    name: Validate repository structure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Check required files and folders exist
+        run: |
+          test -f README.md                         || (echo "README.md missing" && exit 1)
+          test -f PROG_P2.sln                       || (echo "Solution file missing" && exit 1)
+          test -f PROG_P2.csproj                    || (echo "API project missing" && exit 1)
+          test -d Controllers                       || (echo "Controllers folder missing" && exit 1)
+          test -d PROG_P2.Tests                     || (echo "Test project missing" && exit 1)
+          test -f .github/workflows/ci.yml          || (echo "Workflow missing" && exit 1)
+          echo "Repository structure OK"
+
+  build-and-test:
+    name: Build and run unit tests
+    runs-on: ubuntu-latest
+    needs: validate-structure
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore PROG_P2.sln
+
+      - name: Build
+        run: dotnet build PROG_P2.sln --no-restore --configuration Release
+
+      - name: Run unit tests
+        run: dotnet test PROG_P2.sln --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=test-results.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "**/test-results.trx"
