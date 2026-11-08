@@ -1,6 +1,6 @@
 # RaceDay – Part 2: RESTful API
 
-![RaceDay CI](https://github.com/ntwaizin/PROG_P2/actions/workflows/ci.yml/badge.svg)
+![RaceDay CI]([https://github.com/ntwaizin/PROG_P2/actions/workflows/ci.yml/badge.svg)](https://github.com/ntwaizin/RESUBMISSION/actions)
 
 RaceDay is an event management system for South African road running, walking and
 cycling events. This repository contains the **Part 2 REST API** (ASP.NET Core 8,
