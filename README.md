@@ -8,8 +8,8 @@ Entity Framework Core Code-First, SQL Server, server-side sessions, Swagger and 
 
 | Item | Link |
 |---|---|
-| YouTube video (unlisted) | **PASTE YOUR LINK HERE** |
-| GitHub Actions | https://github.com/ntwaizin/PROG_P2/actions |
+ |
+| GitHub Actions | [https://github.com/ntwaizin/PROG_P2/actions/workflows/ci.yml/badge.svg)](https://github.com/ntwaizin/RESUBMISSION/actions |
 
 ## Roles
 
