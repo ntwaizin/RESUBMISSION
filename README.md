@@ -131,3 +131,8 @@ ASP.NET Core 8 MVC front end for the RaceDay event platform. It talks **only** t
 ## Roles
 - **Organiser** – dashboard, create/edit/delete events (with banner upload), manage categories, view enrolments, capture & publish results.
 - **Participant** – browse/filter upcoming events, view details, enter an event by category, see My Events (colour-coded status), My Results (finish time + position), edit profile and upload a profile picture.
+
+## Run locally
+1. Start the Part 2 API (note its URL, e.g. `https://localhost:7276/`).
+2. Set `ApiSettings:BaseUrl` in `appsettings.json` to that URL.
+3. `dotnet run` and open the URL printed in the console.
