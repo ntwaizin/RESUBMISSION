@@ -143,3 +143,13 @@ docker build -t raceday-web . && docker run --rm -p 8080:8080 -e ApiSettings__Ba
 ```
 Open http://localhost:8080. Replace the API URL with wherever your API is reachable from the container
 (on Linux add `--add-host=host.docker.internal:host-gateway`).
+
+## API contract assumed (edit `Services/ApiRoutes.cs` and `Models/ApiModels.cs` if yours differs)
+| Purpose | Call |
+|---|---|
+| Auth | `POST api/auth/register`, `POST api/auth/login` (returns `role`, `userID`), `POST api/auth/logout` |
+| Profile | `GET/PUT api/profile`, `POST api/profile/picture` (multipart `file`) |
+| Events | `GET/POST api/events`, `GET/PUT/DELETE api/events/{id}`, `POST api/events/{id}/banner` (multipart `file`) |
+| Categories | `GET/POST api/events/{id}/categories`, `DELETE api/categories/{id}` |
+| Enrolments | `POST api/enrolments {eventID, categoryID}`, `GET api/enrolments/my`, `GET api/events/{id}/enrolments` |
+| Results | `GET/POST api/events/{id}/results`, `GET api/results/my` |
