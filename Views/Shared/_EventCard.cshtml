@@ -1,0 +1,18 @@
+@model RaceDay.Web.Models.EventDto
+<div class="card h-100">
+    @if (!string.IsNullOrWhiteSpace(Model.BannerUrl))
+    {
+        <img src="@Model.BannerUrl" class="event-banner" alt="@Model.Name banner" loading="lazy" />
+    }
+    else
+    {
+        <div class="event-banner-fallback">@Model.EventType</div>
+    }
+    <div class="card-body d-flex flex-column">
+        <span class="badge type-badge align-self-start mb-2">@Model.EventType</span>
+        <h5 class="mb-1">@Model.Name</h5>
+        <p class="text-muted mb-2">@Model.EventDate.ToString("dddd, dd MMM yyyy") &middot; @Model.Location</p>
+        <p class="mb-3"><strong>@Model.Distance.ToString("0.##") km</strong></p>
+        <a class="btn btn-primary mt-auto" asp-controller="Events" asp-action="Details" asp-route-id="@Model.EventID">View Event</a>
+    </div>
+</div>

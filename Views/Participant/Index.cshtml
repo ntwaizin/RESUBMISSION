@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Participant Dashboard";
+    var enrolments = (List<RaceDay.Web.Models.EnrolmentDto>)ViewBag.Enrolments;
+    int results = ViewBag.ResultCount;
+    var next = enrolments.Where(e => e.EventDate >= DateTime.Today).OrderBy(e => e.EventDate).FirstOrDefault();
+}
+<div class="rd-hero"><h1>Your Race Day</h1><p>Track your entries and race history.</p></div>
+@if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+<div class="row g-4 mb-4">
+    <div class="col-md-4"><div class="card stat-card card-accent text-center"><div class="card-body"><div class="stat">@enrolments.Count</div><div class="text-muted">Events entered</div></div></div></div>
+    <div class="col-md-4"><div class="card stat-card card-accent text-center"><div class="card-body"><div class="stat">@results</div><div class="text-muted">Results recorded</div></div></div></div>
+    <div class="col-md-4"><div class="card stat-card card-accent text-center"><div class="card-body"><div class="stat fs-2 pt-3">@(next?.EventName ?? "None yet")</div><div class="text-muted">Next event@(next?.EventDate != null ? " · " + next.EventDate.Value.ToString("dd MMM yyyy") : "")</div></div></div></div>
+</div>
+<div class="row g-4">
+    <div class="col-md-3"><div class="card h-100"><div class="card-body"><h5>Browse Events</h5><p>Discover upcoming events.</p><a class="btn btn-primary" asp-controller="Events" asp-action="Index">Browse</a></div></div></div>
+    <div class="col-md-3"><div class="card h-100"><div class="card-body"><h5>My Events</h5><p>Your entries and statuses.</p><a class="btn btn-primary" asp-action="MyEvents">View</a></div></div></div>
+    <div class="col-md-3"><div class="card h-100"><div class="card-body"><h5>My Results</h5><p>Finish times and positions.</p><a class="btn btn-primary" asp-action="MyResults">View</a></div></div></div>
+    <div class="col-md-3"><div class="card h-100"><div class="card-body"><h5>My Profile</h5><p>Update your details.</p><a class="btn btn-primary" asp-action="Profile">Edit</a></div></div></div>
+</div>

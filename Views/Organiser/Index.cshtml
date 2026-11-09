@@ -1,0 +1,45 @@
+@model List<RaceDay.Web.Models.EventSummary>
+@{
+    ViewData["Title"] = "Organiser Dashboard";
+    var upcoming = Model.Where(m => m.Event.EventDate.Date >= DateTime.Today).OrderBy(m => m.Event.EventDate).ToList();
+}
+<div class="rd-hero"><h1>Organiser Dashboard</h1><p>Your events, enrolments and upcoming race days at a glance.</p></div>
+@if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4"><div class="card stat-card card-accent text-center"><div class="card-body"><div class="stat">@Model.Count</div><div class="text-muted">Events created</div></div></div></div>
+    <div class="col-md-4"><div class="card stat-card card-accent text-center"><div class="card-body"><div class="stat">@Model.Sum(m => m.Enrolments)</div><div class="text-muted">Total enrolments</div></div></div></div>
+    <div class="col-md-4"><div class="card stat-card card-accent text-center"><div class="card-body"><div class="stat">@upcoming.Count</div><div class="text-muted">Upcoming events</div></div></div></div>
+</div>
+
+<div class="card"><div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Events</h3>
+        <a class="btn btn-primary" asp-action="CreateEvent">+ New Event</a>
+    </div>
+    @if (!Model.Any())
+    {
+        <p class="text-muted mb-0">You have not created any events yet.</p>
+    }
+    else
+    {
+        <div class="table-responsive"><table class="table align-middle">
+            <thead><tr><th>Event</th><th>Date</th><th>Type</th><th class="text-center">Enrolments</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var m in Model.OrderBy(s => s.Event.EventDate))
+            {
+                <tr>
+                    <td><strong>@m.Event.Name</strong><div class="text-muted small">@m.Event.Location</div></td>
+                    <td>@m.Event.EventDate.ToString("dd MMM yyyy")@(m.Event.EventDate.Date < DateTime.Today ? " (past)" : "")</td>
+                    <td><span class="badge type-badge">@m.Event.EventType</span></td>
+                    <td class="text-center"><strong>@m.Enrolments</strong></td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Enrolments" asp-route-id="@m.Event.EventID">Enrolments</a>
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Results" asp-route-id="@m.Event.EventID">Results</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table></div>
+    }
+</div></div>

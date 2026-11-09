@@ -1,0 +1,62 @@
+@model RaceDay.Web.Models.EventDetailsModel
+@{
+    ViewData["Title"] = Model.Event.Name;
+    var role = Context.Session.GetString("UserRole");
+    var e = Model.Event;
+}
+<div class="card mb-4">
+    @if (!string.IsNullOrWhiteSpace(e.BannerUrl))
+    {
+        <img src="@e.BannerUrl" class="event-banner event-banner-lg" alt="@e.Name banner" />
+    }
+    else
+    {
+        <div class="event-banner-fallback">@e.EventType</div>
+    }
+    <div class="card-body">
+        <span class="badge type-badge mb-2">@e.EventType</span>
+        <h1>@e.Name</h1>
+        <p class="lead">@e.Description</p>
+        <div class="row text-center g-3 mt-1">
+            <div class="col-md-4"><div class="stat-card"><div class="stat">@e.EventDate.ToString("dd MMM")</div><div class="text-muted">@e.EventDate.ToString("yyyy · HH:mm")</div></div></div>
+            <div class="col-md-4"><div class="stat-card"><div class="stat">@e.Distance.ToString("0.##")</div><div class="text-muted">Kilometres</div></div></div>
+            <div class="col-md-4"><div class="stat-card"><div class="stat fs-2 pt-2">@e.Location</div><div class="text-muted">Location</div></div></div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-accent">
+    <div class="card-body">
+        <h3>Categories</h3>
+        @if (!Model.Categories.Any())
+        {
+            <p class="text-muted mb-0">The organiser has not added categories yet.</p>
+        }
+        else if (role == "Participant" && Model.AlreadyEnrolled)
+        {
+            <ul>@foreach (var c in Model.Categories) { <li>@c.Name</li> }</ul>
+            <div class="alert alert-success mb-0">You are already entered in this event. <a asp-controller="Participant" asp-action="MyEvents">View my events</a></div>
+        }
+        else if (role == "Participant")
+        {
+            <form asp-action="Enrol" method="post">
+                <input type="hidden" name="eventId" value="@e.EventID" />
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-8">
+                        <label class="form-label" for="categoryId">Select your category</label>
+                        <select id="categoryId" name="categoryId" class="form-select" required>
+                            <option value="">-- choose a category --</option>
+                            @foreach (var c in Model.Categories) { <option value="@c.CategoryID">@c.Name</option> }
+                        </select>
+                    </div>
+                    <div class="col-md-4"><button class="btn btn-primary w-100" type="submit">Enter Event</button></div>
+                </div>
+            </form>
+        }
+        else
+        {
+            <ul class="mb-0">@foreach (var c in Model.Categories) { <li>@c.Name</li> }</ul>
+        }
+    </div>
+</div>
+<a class="btn btn-outline-secondary mt-3" asp-action="Index">&larr; Back to events</a>

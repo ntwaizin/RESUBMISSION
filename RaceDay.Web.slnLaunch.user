@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "RaceDay.Web.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\..\\..\\Downloads\\PROG_P2_fixed\\PROG_P2.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\..\\..\\Downloads\\PROG_P2_fixed\\PROG_P2.Tests\\PROG_P2.Tests.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

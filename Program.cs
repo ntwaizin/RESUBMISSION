@@ -1,78 +1,62 @@
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using PROG_P2.Data;
+using RaceDay.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
 
-// Entity Framework Core (Code-First) with SQL Server
-builder.Services.AddDbContext<RaceDayContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("RaceDayConnection")));
-
-// Server-side session (stores AccountID, UserID and Role after login)
+// Session (stores API cookie, user id and role). Custom cookie name so it
+// never collides with the API's ".AspNetCore.Session" cookie on localhost.
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
+    options.Cookie.Name = "RaceDay.Web.Session";
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
-// Swagger (with XML comments so every endpoint is described)
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "RaceDay API",
-        Version = "v1",
-        Description = "REST API for the RaceDay event management system. " +
-                      "Log in through POST /api/auth/login first - the session cookie " +
-                      "then authenticates every other request made from Swagger."
-    });
+builder.Services.AddHttpContextAccessor();
 
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        options.IncludeXmlComments(xmlPath);
-    }
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
+if (string.IsNullOrWhiteSpace(apiBaseUrl))
+    throw new InvalidOperationException("ApiSettings:BaseUrl is missing from configuration.");
+
+var allowUntrustedCert = builder.Configuration.GetValue<bool>("ApiSettings:AllowUntrustedCertificate");
+
+builder.Services.AddHttpClient("RaceDayApi", client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    // UseCookies = false: the session cookie is attached manually per user,
+    // so cookies must never be shared between users via a pooled handler.
+    var handler = new HttpClientHandler { UseCookies = false };
+    if (allowUntrustedCert)
+        handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+    return handler;
 });
+
+builder.Services.AddScoped<RaceDayApiService>();
 
 var app = builder.Build();
 
-// Create / update the SQL Server database on start-up (skipped for the in-memory test database)
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsDevelopment())
 {
-    var db = scope.ServiceProvider.GetRequiredService<RaceDayContext>();
-    if (db.Database.IsRelational())
-    {
-        if (db.Database.GetMigrations().Any())
-        {
-            db.Database.Migrate();
-        }
-        else
-        {
-            db.Database.EnsureCreated();
-        }
-    }
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Inside Docker the container only listens on HTTP.
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") != "true")
+    app.UseHttpsRedirection();
 
-app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
 app.UseSession();
-app.UseAuthorization();
-app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
-// Makes the Program class visible to the test project (WebApplicationFactory<Program>)
-public partial class Program { }

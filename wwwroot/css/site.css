@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap');
+
+:root {
+    --rd-navy: #0b1d33;
+    --rd-orange: #ff5a1f;
+    --rd-orange-dark: #d94610;
+    --rd-lime: #b6f03c;
+    --rd-bg: #f4f6f9;
+}
+
+html { font-size: 15px; position: relative; min-height: 100%; }
+body {
+    font-family: 'Barlow', system-ui, sans-serif;
+    background: var(--rd-bg);
+    margin-bottom: 60px;
+    color: #1d2733;
+}
+h1, h2, h3, h4, h5, .navbar-brand, .btn, .badge, .display-font {
+    font-family: 'Barlow Condensed', 'Barlow', sans-serif;
+    letter-spacing: .02em;
+}
+h1, h2, h3 { font-weight: 800; text-transform: uppercase; color: var(--rd-navy); }
+
+/* Navbar */
+.rd-nav { background: var(--rd-navy); border-bottom: 4px solid var(--rd-orange); }
+.rd-nav .navbar-brand { color: #fff; font-size: 1.7rem; font-weight: 800; text-transform: uppercase; }
+.rd-nav .navbar-brand span { color: var(--rd-orange); }
+.rd-nav .nav-link { color: #cfd9e6; font-size: 1.1rem; font-weight: 600; text-transform: uppercase; }
+.rd-nav .nav-link:hover, .rd-nav .nav-link.active { color: var(--rd-lime); }
+.rd-role-pill { background: var(--rd-orange); color: #fff; border-radius: 999px; padding: .1rem .7rem; font-size: .85rem; }
+
+/* Buttons */
+.btn { font-weight: 700; text-transform: uppercase; border-radius: .4rem; }
+.btn-primary { background: var(--rd-orange); border-color: var(--rd-orange); }
+.btn-primary:hover, .btn-primary:focus { background: var(--rd-orange-dark); border-color: var(--rd-orange-dark); }
+.btn-outline-primary { color: var(--rd-orange); border-color: var(--rd-orange); }
+.btn-outline-primary:hover { background: var(--rd-orange); border-color: var(--rd-orange); }
+
+/* Cards */
+.card { border: 0; border-radius: .75rem; box-shadow: 0 2px 10px rgba(11, 29, 51, .08); }
+.card-accent { border-top: 4px solid var(--rd-orange); }
+.stat-card .stat { font-family: 'Barlow Condensed', sans-serif; font-size: 3rem; font-weight: 800; color: var(--rd-orange); line-height: 1; }
+
+/* Hero / banners */
+.rd-hero { background: linear-gradient(120deg, var(--rd-navy), #1c3f66); color: #fff; border-radius: .75rem; padding: 2rem; margin-bottom: 1.5rem; }
+.rd-hero h1, .rd-hero h2 { color: #fff; margin: 0; }
+.rd-hero p { margin: .3rem 0 0; color: #cfd9e6; }
+.event-banner { height: 180px; object-fit: cover; width: 100%; border-radius: .75rem .75rem 0 0; }
+.event-banner-fallback { height: 180px; border-radius: .75rem .75rem 0 0; background: linear-gradient(135deg, var(--rd-orange), var(--rd-navy)); display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Barlow Condensed'; font-size: 2rem; font-weight: 800; text-transform: uppercase; }
+.event-banner-lg { max-height: 340px; }
+.avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--rd-orange); background: #dde3ea; }
+
+/* Status + type badges */
+.badge-status { font-size: .95rem; padding: .4em .8em; }
+.status-confirmed { background: #1f9d55; color: #fff; }
+.status-pending { background: #f5a623; color: #1d2733; }
+.status-cancelled { background: #d64545; color: #fff; }
+.status-other { background: #6c7a89; color: #fff; }
+.type-badge { background: var(--rd-lime); color: var(--rd-navy); }
+
+table.table thead th { background: var(--rd-navy); color: #fff; font-family: 'Barlow Condensed'; text-transform: uppercase; letter-spacing: .04em; border: 0; }
+.form-control:focus, .form-select:focus { border-color: var(--rd-orange); box-shadow: 0 0 0 .2rem rgba(255, 90, 31, .2); }
+.footer { position: absolute; bottom: 0; width: 100%; line-height: 60px; background: #fff; }

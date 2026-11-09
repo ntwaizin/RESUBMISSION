@@ -1,0 +1,39 @@
+@model List<RaceDay.Web.Models.EventDto>
+@{
+    ViewData["Title"] = "Upcoming Events";
+    string? search = ViewBag.Search; string? type = ViewBag.Type;
+}
+<div class="rd-hero"><h1>Upcoming Events</h1><p>Find your next run, walk or ride.</p></div>
+
+@if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-6"><input name="search" value="@search" class="form-control" placeholder="Search by name or location" /></div>
+    <div class="col-md-3">
+        <select name="type" class="form-select">
+            <option value="">All types</option>
+            @foreach (var t in new[] { "Run", "Walk", "Cycle" })
+            {
+                <option value="@t" selected="@(string.Equals(type, t, StringComparison.OrdinalIgnoreCase))">@t</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3 d-flex gap-2">
+        <button class="btn btn-primary flex-fill" type="submit">Filter</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No upcoming events match your search.</div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var e in Model)
+        {
+            <div class="col-md-6 col-lg-4"><partial name="_EventCard" model="e" /></div>
+        }
+    </div>
+}

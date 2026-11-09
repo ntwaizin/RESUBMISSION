@@ -1,0 +1,17 @@
+@model RaceDay.Web.Models.EnrolmentsPageModel
+@{ ViewData["Title"] = "Enrolments"; }
+<div class="rd-hero"><h2>Enrolments</h2><p>@Model.Event.Name &middot; @Model.Enrolments.Count participant(s)</p></div>
+@if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+@if (!Model.Enrolments.Any()) { <div class="alert alert-info">No participants have enrolled yet.</div> }
+else
+{
+    <div class="card"><div class="card-body table-responsive"><table class="table align-middle mb-0">
+        <thead><tr><th>Participant</th><th>Email</th><th>Category</th><th>Enrolled</th><th>Status</th></tr></thead><tbody>
+        @foreach (var e in Model.Enrolments)
+        {
+            <tr><td><strong>@(e.ParticipantName ?? "Participant #" + e.ParticipantID)</strong></td><td>@e.ParticipantEmail</td><td>@e.CategoryName</td>
+            <td>@(e.EnrolmentDate?.ToString("dd MMM yyyy"))</td><td><partial name="_Status" model="e.Status" /></td></tr>
+        }
+        </tbody></table></div></div>
+}
+<a class="btn btn-outline-secondary mt-3" asp-action="Events">&larr; Back to events</a>

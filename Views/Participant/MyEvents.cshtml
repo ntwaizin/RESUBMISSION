@@ -1,0 +1,19 @@
+@model List<RaceDay.Web.Models.EnrolmentDto>
+@{ ViewData["Title"] = "My Events"; }
+<div class="rd-hero"><h1>My Events</h1><p>Every event you have entered.</p></div>
+@if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+@if (!Model.Any()) { <div class="alert alert-info">You have not entered any events yet. <a asp-controller="Events" asp-action="Index">Browse events</a>.</div> }
+else
+{
+    <div class="card"><div class="card-body table-responsive"><table class="table align-middle mb-0">
+        <thead><tr><th>Event</th><th>Date</th><th>Category</th><th>Status</th></tr></thead><tbody>
+        @foreach (var e in Model)
+        {
+            <tr>
+                <td><a asp-controller="Events" asp-action="Details" asp-route-id="@e.EventID"><strong>@(e.EventName ?? "Event #" + e.EventID)</strong></a></td>
+                <td>@(e.EventDate?.ToString("dd MMM yyyy"))</td><td>@e.CategoryName</td>
+                <td><partial name="_Status" model="e.Status" /></td>
+            </tr>
+        }
+        </tbody></table></div></div>
+}

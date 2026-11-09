@@ -1,0 +1,27 @@
+@model RaceDay.Web.Models.ProfileModel
+@{ ViewData["Title"] = "My Profile"; }
+@if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+<div class="row g-4">
+    <div class="col-md-4"><div class="card card-accent text-center"><div class="card-body">
+        @if (!string.IsNullOrWhiteSpace(Model.ProfilePictureUrl)) { <img src="@Model.ProfilePictureUrl" class="avatar mb-3" alt="Profile picture" /> }
+        else { <div class="avatar mb-3 mx-auto d-flex align-items-center justify-content-center display-font fs-1">@(string.IsNullOrEmpty(Model.FirstName) ? "?" : Model.FirstName[..1])</div> }
+        <h4>@Model.FirstName @Model.LastName</h4>
+        <form asp-action="UploadPicture" method="post" enctype="multipart/form-data">
+            <input type="file" name="picture" accept="image/*" class="form-control mb-2" required />
+            <button class="btn btn-primary w-100" type="submit">Upload Picture</button>
+        </form>
+    </div></div></div>
+    <div class="col-md-8"><div class="card"><div class="card-body p-4">
+        <h3>Personal Information</h3>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+        <form asp-action="Profile" method="post" novalidate>
+            <div class="row">
+                <div class="col-md-6 mb-3"><label asp-for="FirstName" class="form-label"></label><input asp-for="FirstName" class="form-control" /><span asp-validation-for="FirstName" class="text-danger"></span></div>
+                <div class="col-md-6 mb-3"><label asp-for="LastName" class="form-label"></label><input asp-for="LastName" class="form-control" /><span asp-validation-for="LastName" class="text-danger"></span></div>
+            </div>
+            <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="PhoneNumber" class="form-label"></label><input asp-for="PhoneNumber" class="form-control" /><span asp-validation-for="PhoneNumber" class="text-danger"></span></div>
+            <button class="btn btn-primary" type="submit">Save Changes</button>
+        </form>
+    </div></div></div>
+</div>

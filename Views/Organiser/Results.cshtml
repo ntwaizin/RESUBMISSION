@@ -1,0 +1,29 @@
+@model RaceDay.Web.Models.ResultsPageModel
+@{ ViewData["Title"] = "Enter Results"; }
+<div class="rd-hero"><h2>Enter Results</h2><p>@Model.Event.Name &middot; @Model.Event.EventDate.ToString("dd MMM yyyy")</p></div>
+@if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+@if (Model.Event.EventDate.Date > DateTime.Today)
+{
+    <div class="alert alert-warning">This event has not taken place yet. Results are normally captured after the event concludes.</div>
+}
+@if (!Model.Rows.Any()) { <div class="alert alert-info">No enrolled participants to capture results for.</div> }
+else
+{
+    <form asp-action="Results" asp-route-id="@Model.Event.EventID" method="post" novalidate>
+        <div class="card"><div class="card-body table-responsive"><table class="table align-middle mb-0">
+            <thead><tr><th>Participant</th><th>Category</th><th style="width:180px">Finish time (hh:mm:ss)</th><th style="width:130px">Position</th></tr></thead><tbody>
+            @for (int i = 0; i < Model.Rows.Count; i++)
+            {
+                <tr>
+                    <td><strong>@Model.Rows[i].ParticipantName</strong>
+                        <input type="hidden" asp-for="Rows[i].EnrolmentID" /><input type="hidden" asp-for="Rows[i].ParticipantID" /></td>
+                    <td>@Model.Rows[i].CategoryName</td>
+                    <td><input asp-for="Rows[i].FinishTime" class="form-control" placeholder="01:45:30" pattern="\d{1,2}:[0-5]\d:[0-5]\d" /></td>
+                    <td><input asp-for="Rows[i].Position" type="number" min="1" class="form-control" /></td>
+                </tr>
+            }
+            </tbody></table></div></div>
+        <button class="btn btn-primary mt-3" type="submit">Publish Results</button>
+        <a class="btn btn-outline-secondary mt-3" asp-action="Events">Back</a>
+    </form>
+}

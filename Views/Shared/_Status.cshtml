@@ -1,0 +1,12 @@
+@model string?
+@{
+    var s = (Model ?? "").Trim();
+    var css = s.ToLowerInvariant() switch
+    {
+        "confirmed" => "status-confirmed",
+        "pending" => "status-pending",
+        "cancelled" or "canceled" or "rejected" => "status-cancelled",
+        _ => "status-other"
+    };
+}
+<span class="badge badge-status @css">@(string.IsNullOrEmpty(s) ? "Unknown" : s)</span>
