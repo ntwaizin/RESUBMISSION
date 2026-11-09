@@ -123,5 +123,7 @@ PROG_P2/
 └── README.md
 ```
 
-## AI usage disclosure
-*(Write this yourself and keep it honest – state which tools you used, for what, and what you wrote or changed yourself.)*
+RaceDay – Part 3 (MVC Web App)
+
+ASP.NET Core 8 MVC front end for the RaceDay event platform. It talks **only** to the Part 2 API
+(no database or Azure access here); the API stores images in Azure Blob Storage.
