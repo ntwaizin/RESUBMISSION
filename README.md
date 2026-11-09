@@ -136,3 +136,10 @@ ASP.NET Core 8 MVC front end for the RaceDay event platform. It talks **only** t
 1. Start the Part 2 API (note its URL, e.g. `https://localhost:7276/`).
 2. Set `ApiSettings:BaseUrl` in `appsettings.json` to that URL.
 3. `dotnet run` and open the URL printed in the console.
+
+## Run with Docker (single command)
+```
+docker build -t raceday-web . && docker run --rm -p 8080:8080 -e ApiSettings__BaseUrl=http://host.docker.internal:5000/ raceday-web
+```
+Open http://localhost:8080. Replace the API URL with wherever your API is reachable from the container
+(on Linux add `--add-host=host.docker.internal:host-gateway`).
