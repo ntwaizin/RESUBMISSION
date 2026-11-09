@@ -127,3 +127,7 @@ RaceDay – Part 3 (MVC Web App)
 
 ASP.NET Core 8 MVC front end for the RaceDay event platform. It talks **only** to the Part 2 API
 (no database or Azure access here); the API stores images in Azure Blob Storage.
+
+## Roles
+- **Organiser** – dashboard, create/edit/delete events (with banner upload), manage categories, view enrolments, capture & publish results.
+- **Participant** – browse/filter upcoming events, view details, enter an event by category, see My Events (colour-coded status), My Results (finish time + position), edit profile and upload a profile picture.
